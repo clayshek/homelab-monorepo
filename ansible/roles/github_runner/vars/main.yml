@@ -3,5 +3,5 @@
 # Ref: docs.github.com/en/actions/hosting-your-own-runners
 
 github_runner_version: 'v2.277.1'
-git_repo_url: 'https://github.com/clayshek/packer-proxmox-templates'
+git_repo_url: 'https://github.com/repourl/packer-templates'
 git_repo_token: ''
