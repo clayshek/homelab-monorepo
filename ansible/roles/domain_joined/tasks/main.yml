@@ -1,0 +1,27 @@
+---
+# main.yml tasks file for domain_joined role
+# Requires Active Directory Domain to be present
+
+# Set client DNS servers
+- name: Configure Primary & Secondary DNS Servers
+  win_dns_client:
+    adapter_names: 'Ethernet'
+    ipv4_addresses:
+      - "{{ad_primary_dns_server}}"
+      - "{{ad_secondary_dns_server}}" 
+
+# Join domain
+- name: Join domain
+  win_domain_membership:
+    dns_domain_name: "{{domain_dns_name}}"
+    domain_admin_user: "{{domain_admin_user}}"
+    domain_admin_password: "{{domain_admin_password}}"
+    # domain_ou_path: "{{domain_ou_path}}"
+    # domain_ou_path fails unless OU exists, not handling OU creation logic currently,
+    # so defaults to using Computers container in domain.
+    state: domain
+  register: domain_state
+
+# Reboot
+- win_reboot:
+  when: domain_state.reboot_required

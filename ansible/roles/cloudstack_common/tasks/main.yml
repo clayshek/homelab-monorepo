@@ -1,0 +1,24 @@
+---
+# main.yml tasks for cloudstack_common role
+
+# -------------- CloudStack Common Config ---------------
+# Ref: http://docs.cloudstack.apache.org/en/4.15.0.0/installguide/overview/index.html
+
+- name: Install Chrony
+  apt:
+    name: chrony
+    state: present
+  become: yes
+
+- name: Add CloudStack apt key
+  ansible.builtin.apt_key:
+    url: http://download.cloudstack.org/release.asc
+    state: present
+  become: yes
+
+- name: Add CloudStack repository into sources list
+  apt_repository:
+    repo: deb http://download.cloudstack.org/ubuntu bionic 4.15
+    state: present
+    update_cache: true
+  become: yes   

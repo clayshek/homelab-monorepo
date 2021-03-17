@@ -1,0 +1,61 @@
+---
+# main.yml tasks for github_runner role
+
+# -------------- Packer install and Pre-reqs ---------------
+- name: Install GPG
+  apt:
+    name: gpg
+    state: present
+
+- name: Add Hashicorp apt key
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Get distribution
+  command: lsb_release -cs
+  register: distro    
+
+- name: Add Hashicorp repository into sources list
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ distro.stdout }} main"
+    #repo: deb-src http://archive.canonical.com/ubuntu hardy partner
+    state: present
+    update_cache: true
+
+- name: Update repositories cache and install Packer
+  apt:
+    name: packer
+    update_cache: true
+
+# ----------------------------------------------------------
+
+# ---------- GitHub Actions Runner Install & Config ---------
+# Ref: docs.github.com/en/actions/hosting-your-own-runners
+
+- name: Create tmp directory space
+  ansible.builtin.file:
+    path: /opt/github-actions-runner
+    state: directory
+
+- name: Download and unarchive GitHub Actions Runner
+  ansible.builtin.unarchive:
+    src: https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz
+    dest: /opt/github-actions-runner
+    remote_src: yes    
+
+- name: Configure GitHub Actions Runner
+  command: /opt/github-actions-runner/config.sh --url https://github.com/clayshek/packer-proxmox-templates --token AFZSJDMQPW5EVBFQZV74WOTAG65C6
+    #args:
+     # creates: /opt/github-actions-runner/config.sh
+  environment:
+    RUNNER_ALLOW_RUNASROOT: '1'
+
+#- name: Install GitHub Actions Runner as Service
+#  command: /opt/github-actions-runner/bin/runsvc.sh install
+ 
+#- name: Start GitHub Actions Runner Service
+#  command: /opt/github-actions-runner/bin/runsvc.sh start
+  #become_user: svc-gitrunner
+
+# ----------------------------------------------------------

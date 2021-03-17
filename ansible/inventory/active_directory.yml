@@ -1,0 +1,6 @@
+primary_dc:
+  hosts:
+    192.168.2.41:
+secondary_dc:
+  hosts:
+    192.168.2.42:

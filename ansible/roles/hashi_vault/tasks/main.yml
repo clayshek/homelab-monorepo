@@ -1,0 +1,29 @@
+---
+# main.yml tasks for vault role
+
+
+# -------------- Vault install and Pre-reqs ---------------
+- name: Install GPG
+  apt:
+    name: gpg
+    state: present
+
+- name: Add Hashicorp apt key
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Get distribution
+  command: lsb_release -cs
+  register: distro    
+
+- name: Add Hashicorp repository into sources list
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ distro.stdout }} main"
+    state: present
+    update_cache: true
+
+- name: Update repositories cache and install Vault
+  apt:
+    name: vault
+    update_cache: true

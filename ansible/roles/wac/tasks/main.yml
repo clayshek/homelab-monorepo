@@ -1,0 +1,48 @@
+---
+# main.yml tasks for wac role
+
+- name: Install Hyper-V management tools
+  win_feature:
+    name: RSAT-Hyper-V-Tools
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_hyperv_feature
+
+- name: Install Clustering management tools
+  win_feature:
+    name: RSAT-Clustering
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_clustering_feature   
+
+- name: Install Active Directory management tools
+  win_feature:
+    name: RSAT-AD-Tools
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_ad_feature  
+
+- name: Reboot if required
+  win_reboot:
+  when: win_hyperv_feature.reboot_required or win_clustering_feature.reboot_required or win_ad_feature.reboot_required
+  
+- name: Copy PoSH script to download & install WAC
+  win_copy:
+    src: Install-WAC.ps1
+    dest: c:\windows\temp\Install-WAC.ps1
+
+# Install Windows Admin Center, if not already present (check in Install-WAC.ps1 script)
+# async set to deal with WINRM restart during WAC install
+
+- name: Run remote PoSH script to download & install WAC
+  win_command: powershell.exe -ExecutionPolicy ByPass -File c:/windows/temp/Install-WAC.ps1
+  async: 360
+
+- name: Set existing WAC inbound port 443 firewall rule for all firewall profiles
+  win_command: powershell.exe Set-NetFirewallRule -DisplayName "SmeInboundOpenException" -Profile Any
+
+- name: Set existing WAC inbound port 80 firewall rule for all firewall profiles
+  win_command: powershell.exe Set-NetFirewallRule -DisplayName "SmeInboundPort80OpenException" -Profile Any  

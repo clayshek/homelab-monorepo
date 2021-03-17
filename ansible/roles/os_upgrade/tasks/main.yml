@@ -1,0 +1,10 @@
+---
+# main.yml tasks for os_upgrade role
+
+# ---------------- OS Dist Upgrade -------------------------
+- name: Upgrade the OS (apt-get dist-upgrade)
+  apt:
+    upgrade: dist
+    update_cache: yes
+  become: yes
+# ----------------------------------------------------------    

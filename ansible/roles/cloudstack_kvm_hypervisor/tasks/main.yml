@@ -1,0 +1,20 @@
+---
+# main.yml tasks for cloudstack_kvm_hypervisor role
+
+# -------------- CloudStack KVM Hypervisor Config ---------------
+# Ref: http://docs.cloudstack.apache.org/en/4.15.0.0/installguide/hypervisor/kvm.html
+
+- name: Install CloudStack agent
+  apt:
+    name: cloudstack-agent
+    state: present
+
+- name: Install QEMU-KVM, Libvirt, & related packages
+  apt: 
+    pkg:
+      - qemu 
+      - qemu-kvm 
+      - libvirt-bin
+      - virt-manager 
+      - bridge-utils
+    state: present

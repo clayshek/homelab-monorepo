@@ -1,0 +1,17 @@
+---
+
+ - hosts: hyperv_first_node
+   gather_facts: no
+   roles:
+     #- os_upgrade
+     #- package_updates
+     - windows_conn_params
+     - windows_common
+     - hyperv
+ 
+ - hosts: hyperv_additional_nodes
+   gather_facts: no
+   roles:
+     - windows_conn_params
+     - windows_common
+     - hyperv

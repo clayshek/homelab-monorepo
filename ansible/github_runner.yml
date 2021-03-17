@@ -1,0 +1,8 @@
+---
+
+ - hosts: github_runner
+   gather_facts: no
+   roles:
+     #- os_upgrade
+     #- package_updates
+     - github_runner

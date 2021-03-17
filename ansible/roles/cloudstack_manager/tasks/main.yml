@@ -1,0 +1,32 @@
+---
+# main.yml tasks for cloudstack_manager role
+
+# -------------- CloudStack Management Server Config ---------------
+# Ref: http://docs.cloudstack.apache.org/en/4.15.0.0/installguide/management-server/index.html
+
+- name: Install CloudStack management server
+  apt:
+    name: cloudstack-management
+    state: present
+  become: yes    
+
+#- name: 'Add MySQL config template' 
+  #template: 
+    #src: ../templates/my.cnf.j2 
+    #dest: /etc/mysql/my.cnf     
+
+- name: Install MySql
+  apt:
+    name: mysql-server
+    state: present     
+
+- name: Setup CloudStack Database
+  command: cloudstack-setup-databases cloud:password@localhost --deploy-as=root -i 127.0.0.1     
+
+- name: Setup CloudStack Management Server
+  command: cloudstack-setup-management   
+
+- name: 'Start CloudStack'
+  service:
+    name: cloudstack-management
+    state: started  

@@ -1,0 +1,9 @@
+---
+
+ - hosts: hashi_vault
+   gather_facts: no
+   roles:
+     - linux_conn_params
+     #- os_upgrade
+     #- package_updates
+     - hashi_vault

@@ -1,0 +1,47 @@
+---
+# main.yml tasks for hyperv role
+
+- name: Install Hyper-V sub features and management tools
+  win_feature:
+    name: Hyper-V
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_hyperv_feature
+
+- name: Install Failover Clustering sub features and management tools
+  win_feature:
+    name: Failover-Clustering
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_fc_feature
+
+- name: Install Data Deduplication sub features and management tools
+  win_feature:
+    name: FS-Data-Deduplication
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_dedup_feature  
+
+- name: Install Storage Replica sub features and management tools
+  win_feature:
+    name: Storage-Replica
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_storrep_feature  
+
+- name: Install Data Center Bridging sub features and management tools
+  win_feature:
+    name: Data-Center-Bridging
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_dcb_feature       
+
+- name: Reboot if required
+  win_reboot:
+  when: win_hyperv_feature.reboot_required or win_fc_feature.reboot_required or win_dedup_feature.reboot_required or win_storrep_feature.reboot_required or win_dcb_feature.reboot_required
+  

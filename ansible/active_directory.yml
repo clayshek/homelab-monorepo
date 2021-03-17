@@ -1,0 +1,19 @@
+---
+
+ - hosts: primary_dc
+   gather_facts: no
+   roles:
+     #- os_upgrade
+     #- package_updates
+     - windows_conn_params
+     - windows_common
+     - domain_controller
+     - primary_domain_controller
+ 
+ - hosts: secondary_dc
+   gather_facts: no
+   roles:
+     - windows_conn_params
+     - windows_common
+     - domain_controller
+     - secondary_domain_controllers

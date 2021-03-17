@@ -1,0 +1,35 @@
+---
+# main.yml tasks for domain_controller role
+
+# Install ADDS Role
+- name: Install AD Role & Subfeatures
+  win_feature:
+    name: AD-Domain-Services
+    include_management_tools: yes
+    include_sub_features: yes
+    state: present
+  register: adds_result
+- name: Collect ADDS provision result
+  debug:
+    msg: "{{adds_result}}"
+- name : Pause for 10 seconds before provisioning another feature
+  pause:
+    seconds: 10   
+
+# Install DNS Role 
+- name: Install DNS & Subfeatures
+  win_feature:
+    name: DNS
+    include_sub_features: true
+    include_management_tools: true
+    state: present
+  register: dns_result
+- name: Collect DNS install result
+  debug:
+    msg: "{{dns_result}}"
+
+# Reboot after roles configuration
+- name: Reboot if required after ADDS & DNS installation, check back after 3 min
+  win_reboot:
+    post_reboot_delay: 180
+  when: adds_result.reboot_required or dns_result.reboot_required      

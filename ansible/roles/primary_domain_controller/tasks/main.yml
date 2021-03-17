@@ -1,0 +1,31 @@
+---
+# main.yml tasks for primary_domain_controller role
+
+# Set client DNS server
+- name: Configure Primary DNS Server
+  win_dns_client:
+    adapter_names: 'Ethernet'
+    ipv4_addresses:
+      - "{{ad_primary_dns_server}}"
+
+# Initialise Forest & Domain 
+- name: Initialize Forest/Domain
+  win_domain:
+      dns_domain_name: "{{domain_dns_name}}"
+      domain_netbios_name: "{{netbios_domain_name}}"
+      safe_mode_password: "{{dc_safe_mode_password}}"
+  register: ad_result
+- name: Collect forest/domain initialization result
+  debug:
+    msg: "{{ad_result}}"
+- name: Reboot Server
+  win_reboot:
+    post_reboot_delay: 120
+  when: ad_result.changed
+
+# Set Domain Admin Password
+- name: Set Domain Admin Password
+  win_domain_user:
+    name: Administrator
+    password: "{{domain_admin_password}}"
+    password_never_expires: yes

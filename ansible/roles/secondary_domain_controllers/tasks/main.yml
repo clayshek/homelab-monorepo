@@ -1,0 +1,29 @@
+---
+# main.yml tasks for secondary_domain_controllers role
+
+# Set client DNS server
+- name: Configure Primary DNS Server
+  win_dns_client:
+    adapter_names: 'Ethernet'
+    ipv4_addresses:
+      - "{{ad_primary_dns_server}}"
+
+# Promote server to DC
+- name: Promote this server to Additional DC
+  win_domain_controller:
+    dns_domain_name: '{{domain_dns_name}}'
+    domain_admin_user: '{{domain_admin_user}}'
+    domain_admin_password: '{{domain_admin_password}}'
+    safe_mode_password: '{{dc_safe_mode_password}}'
+    state: domain_controller
+    log_path: c:\ansible_win_domain_controller.txt
+  register: dcpromo_result
+
+- name: Collect DC Promo Result
+  debug:
+    msg: "{{dcpromo_result}}"      
+
+- name: Reboot Server if required
+  win_reboot:
+    post_reboot_delay: 120
+  when: dcpromo_result.changed

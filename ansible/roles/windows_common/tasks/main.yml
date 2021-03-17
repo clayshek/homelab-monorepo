@@ -1,0 +1,29 @@
+---
+# main.yml tasks for common role
+
+# Enable SMB1 - super insecure, but required in my lab for access to 
+# an internal NAS that only supports SMB v1
+- name: Copy PoSH script to enable SMBv1
+  win_copy:
+    src: Enable-SMB1.ps1
+    dest: c:\windows\temp\Enable-SMB1.ps1
+- name: Run remote PoSH script to enable SMBv1
+  win_command: powershell.exe -ExecutionPolicy ByPass -File c:/windows/temp/Enable-SMB1.ps1    
+
+# Update the default admin password baked into the image template
+- name: Update Administrator password
+  win_user:
+    name: Administrator
+    password: "{{win_local_admin_password}}"
+
+# Install Chocolatey for package management
+#- name: Ensure Chocolatey itself is installed 
+#  win_chocolatey:
+#    name: chocolatey
+    
+# Install OpenSSH
+#- name: Install the Win32-OpenSSH service
+#  chocolatey.chocolatey.win_chocolatey:
+#    name: openssh
+#    package_params: /SSHServerFeature
+#    state: present    

@@ -1,0 +1,14 @@
+---
+# main.yml tasks for windows_conn_params role
+
+# Wait for WINRM connectivity on port 5986 before proceeding. 
+# Rudimentary approach to addressing new server provisioning related Ansible timeouts. 
+- name: Wait for port 5986 / WINRM to become open on the host
+  win_wait_for:
+    port: 5986
+
+# Another rudimentary workaround to a cloudbase-init provisioning issue, where
+# DHCP is enabled on ethernet adapter, causing IP changes until first post-provisioning reboot. 
+# Needs a more elegant solution, but for now, this works as intended. 
+- name: Reboot
+  win_reboot:    

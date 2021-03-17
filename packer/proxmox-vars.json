@@ -1,0 +1,6 @@
+{
+    "proxmox_api_url": "https://192.168.2.31:8006/api2/json",
+    "proxmox_username": "packer-api@pve",
+    "proxmox_password": "{{env `TF_VAR_proxmox_api_pass`}}",
+    "proxmox_node": "pve1"
+}

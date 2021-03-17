@@ -1,0 +1,11 @@
+---
+
+ - hosts: wac
+   gather_facts: no
+   roles:
+     #- os_upgrade
+     #- package_updates
+     - windows_conn_params
+     - windows_common
+     - domain_joined
+     - wac

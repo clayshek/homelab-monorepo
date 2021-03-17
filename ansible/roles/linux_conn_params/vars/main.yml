@@ -1,0 +1,8 @@
+---
+# main.yml variables file for linux_conn_params roles
+
+# Linux connection info for Ansible
+ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+ansible_python_interpreter: auto_silent
+ansible_become: yes

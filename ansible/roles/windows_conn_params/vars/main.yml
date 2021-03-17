@@ -1,0 +1,9 @@
+---
+# main.yml variables file for windows_conn_params roles
+
+# Windows connection info for Ansible
+ansible_user: Ansible
+ansible_password: AnsibleR3ady!
+ansible_connection: winrm
+ansible_winrm_transport: ntlm
+ansible_winrm_server_cert_validation: ignore

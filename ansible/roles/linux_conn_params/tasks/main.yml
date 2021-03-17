@@ -1,0 +1,8 @@
+---
+# main.yml tasks for linux_conn_params role
+
+# Wait for SSH connectivity on port 22 before proceeding. 
+# Rudimentary approach to addressing new server provisioning related Ansible timeouts. 
+- name: Wait for port 22 / SSH to become open on the host
+  wait_for:
+    port: 22

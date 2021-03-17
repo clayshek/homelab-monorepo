@@ -1,0 +1,11 @@
+---
+# main.yml tasks for package_updates role
+
+# ---------------- Package Updates -------------------------
+- name: Update all packages to latest versions
+  apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+  become: yes
+# ----------------------------------------------------------    

@@ -1,0 +1,8 @@
+cloudstack_kvm_hypervisor:
+  hosts:
+    192.168.2.71:
+    192.168.2.72:
+    192.168.2.73:
+cloudstack_manager:
+  hosts:
+    192.168.2.70:
