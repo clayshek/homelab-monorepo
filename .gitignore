@@ -1,0 +1,18 @@
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Cache objects
+packer_cache/
+
+# Crash log
+crash.log
+
+# Ansible Vault Password file
+.vault_pass
+
+*.msi
+private_key.pem
