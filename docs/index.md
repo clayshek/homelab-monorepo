@@ -4,6 +4,8 @@
 
 This (WIP) page describes a home lab environment for evaluation and testing of various technologies. Basic provisioning & configuration of both supporting infrastructure and additional products is documented here - mostly so I remember how I did stuff. 
 
+GitHub Repo: https://github.com/clayshek/homelab-monorepo
+
 ## Goals
 - A stable base platform of hypervisors & container hosts on physical hardware, on which further virtualized or containerized products can be easily deployed without impact to the base platform.
 - Simplicity (as much as possible)
