@@ -56,7 +56,7 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 - Feeds dynamic ansible inventory
 
 ### Ansible Configuration
-- make note of .vault_pass
+- 
 
 ## Capabilities Status Matrix
 
@@ -81,10 +81,10 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 
 ## To-Do
 
-[ ] Add capability to add user ssh key with Ansible
-[ ] Move secrets to Hashicorp Vault
-[ ] Add OpenSSH to windows_common Ansible role
-[ ] Convert Packer from json to hcl
+- [ ] Add capability to add user ssh key with Ansible
+- [ ] Move secrets to Hashicorp Vault
+- [ ] Add OpenSSH to windows_common Ansible role
+- [ ] Convert Packer from json to hcl
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
