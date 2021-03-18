@@ -15,7 +15,8 @@ crash.log
 .vault_pass
 
 # Ansible dynamic inventory files
-ansible/inventory/**
+ansible/inventory/*
+!ansible/inventory/.gitkeep
 
 *.msi
 private_key.pem
