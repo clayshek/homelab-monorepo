@@ -14,5 +14,8 @@ crash.log
 # Ansible Vault Password file
 .vault_pass
 
+# Ansible dynamic inventory files
+ansible/inventory/**
+
 *.msi
 private_key.pem
