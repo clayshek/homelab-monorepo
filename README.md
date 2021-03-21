@@ -4,9 +4,9 @@ The ultimate home lab infrastructure as code repo.
 
 ## Overview
 
-The code in this repo provisions my live home lab environment, as outlined at https://clayshek.github.io/homelab-monorepo. Most workloads run on [Proxmox](https://www.proxmox.com/en/downloads), some on [K3s](https://k3s.io/) on Raspberry Pis, some on [Heroku](https://www.heroku.com/). 
+This code provisions & configures my home lab environment. See https://clayshek.github.io/homelab-monorepo for details. Workloads run either on [Proxmox](https://www.proxmox.com/en/downloads), [K3s](https://k3s.io/) on Raspberry Pis, some on [Heroku](https://www.heroku.com/). 
 
-Tooling here enables provisioning, config, destruction, and reprovisioning of various components including: Windows Active Directory, Hyper-V, Apache CloudStack, Hashicorp Vault, GitHub Actions Runner, Kubernetes, and others (see status matrix below). Components are generally modular and independent, with some obvious exceptions (e.g., Active Directory required for some Windows infra)
+Tooling here enables provisioning, config, destruction, and reprovisioning of various components including: Windows Active Directory, Hyper-V, Apache CloudStack, Hashicorp Vault, GitHub Actions Runner, Kubernetes, etc (see status matrix below). Components are generally modular and independent, with some obvious exceptions (e.g., Active Directory required for some Windows infra)
 
 ## Tools Used 
 
@@ -49,14 +49,16 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 - Clone the repo
 
 ### Packer Templates
+- Using the included Packer templates isn't required, but Terraform provisioning expects a template for most workloads.
+- See README in Packer directory for more info. 
 
 ### Terraform Provisioning
-- terraform init
-- Reference main.tf for capabilities
-- Feeds dynamic ansible inventory
+- Modify provisioning variables as appropriate (see README in Terraform directory)
+- `terraform init`
+- `terraform apply -target=module.*modulename*`
 
 ### Ansible Configuration
-- 
+- Can be run independently, but Terraform hands off to Ansible after provisioning, so not much else required other than modifying variables as appropriate (see README in Ansible directory). 
 
 ## Capabilities Status Matrix
 

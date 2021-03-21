@@ -7,6 +7,7 @@
      #- package_updates
      - windows_conn_params
      - windows_common
+     - domain_joined
      - hyperv
  
  - hosts: hyperv_additional_nodes
@@ -14,4 +15,5 @@
    roles:
      - windows_conn_params
      - windows_common
+     - domain_joined
      - hyperv

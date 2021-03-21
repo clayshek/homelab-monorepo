@@ -1,0 +1,18 @@
+---
+# main.yml tasks for awx role
+
+
+# -------------- AWX install and Pre-reqs ---------------
+
+- name: Update repositories cache and install apt-transport-https
+  apt:
+    name: apt-transport-https
+    update_cache: true
+
+#- name: Virtualbox
+  #apt: 
+    #pkg:
+      #- virtualbox 
+      #- virtualbox-ext-pack
+    #state: present
+    #update_cache: true   

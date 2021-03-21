@@ -10,6 +10,7 @@
 # terraform [plan|apply|destroy] -target=module.cloudstack
 # terraform [plan|apply|destroy] -target=module.wac
 # terraform [plan|apply|destroy] -target=module.hyperv
+# terraform [plan|apply|destroy] -target=module.awx
 # -------------------------------------------------------------------------------------------
 
 terraform {
@@ -72,4 +73,11 @@ module "hyperv" {
 #------------------------------------------#
 module "cloudstack" {
   source = "./live/cloudstack"
+}
+
+#------------------------------------------#
+# -------- Windows Admin Center ---------- #
+#------------------------------------------#
+module "awx" {
+  source = "./live/awx"
 }

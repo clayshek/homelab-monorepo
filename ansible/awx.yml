@@ -1,0 +1,9 @@
+---
+
+ - hosts: awx
+   gather_facts: no
+   roles:
+     - linux_conn_params
+     #- os_upgrade
+     #- package_updates
+     - awx
