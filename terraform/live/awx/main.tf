@@ -89,6 +89,6 @@ resource "null_resource" "configuration" {
 
   // Ansible playbook run
   provisioner "local-exec" {
-    command = "ansible-playbook -u ${local.default_image_username} -i ../ansible/inventory --private-key ${path.module}/private_key.pem ../ansible/${local.ansible_inventory_group}.yml"
+    command = "ansible-playbook -u ${local.default_image_username} -i ../ansible/inventory --private-key ${path.module}/private_key.pem --vault-password-file ../ansible/.vault_pass ../ansible/${local.ansible_inventory_group}.yml"
   }
 }

@@ -1,18 +1,102 @@
 ---
 # main.yml tasks for awx role
 
+# -------------- AWX Pre-reqs & Install ---------------
+# Ref: https://github.com/ansible/awx/blob/17.1.0/INSTALL.md#docker-compose
 
-# -------------- AWX install and Pre-reqs ---------------
-
-- name: Update repositories cache and install apt-transport-https
-  apt:
-    name: apt-transport-https
+- name: Docker Prereqs
+  apt: 
+    pkg:
+      - apt-transport-https 
+      - ca-certificates
+      - curl
+      - gnupg
+      - software-properties-common
+      - lsb-release
+    state: present
     update_cache: true
 
-#- name: Virtualbox
-  #apt: 
-    #pkg:
-      #- virtualbox 
-      #- virtualbox-ext-pack
-    #state: present
-    #update_cache: true   
+- name: Add Docker apt key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Get distribution
+  command: lsb_release -cs
+  register: distro    
+
+- name: Add Docker repository into sources list
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ distro.stdout }} stable"
+    state: present
+    update_cache: true  
+
+- name: Docker
+  apt: 
+    pkg:
+      - docker-ce 
+      - docker-ce-cli
+      - containerd.io
+    state: present   
+    update_cache: true   
+
+- name: Ensure group "docker" exists 
+  ansible.builtin.group:
+    name: docker
+    state: present    
+
+- name: Appending the group 'docker' to the user's groups
+  ansible.builtin.user:
+    name: ubuntu
+    groups: docker
+    append: yes    
+
+- name: Add nginx stable repository from PPA and install its signing key on Ubuntu target
+  ansible.builtin.apt_repository:
+    repo: ppa:ansible/ansible
+    update_cache: yes    
+
+- name: Update repositories cache and install Ansible
+  apt:
+    name: ansible
+    update_cache: true    
+
+- name: Nodejs & NPM
+  apt: 
+    pkg:
+      - nodejs 
+      - npm
+    state: present   
+
+- name: Python, Git, & more dependencies
+  apt: 
+    pkg:
+      - python3-pip
+      - git
+      - pwgen
+      - vim
+    state: present 
+    update_cache: true
+
+- name: Update pip
+  pip:
+    name: pip
+    state: latest
+
+- name: Install requests python package version 2.14.2
+  pip:
+    name: requests==2.14.2
+
+- name: Install docker-compose python package version 1.27.4
+  pip:
+    name: docker-compose==1.27.4
+
+- name: Clone AWX repo from github
+  ansible.builtin.git:
+    repo: https://github.com/ansible/awx.git
+    dest: /home/ubuntu/awx
+    depth: 50
+    version: 17.1.0 
+
+- name: Run AWX Install Ansible Playbook    
+  shell: ansible-playbook -i awx/installer/inventory -e admin_password={{awx_admin_password}} awx/installer/install.yml    
