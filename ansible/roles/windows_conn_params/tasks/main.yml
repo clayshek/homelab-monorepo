@@ -1,5 +1,5 @@
 ---
-# main.yml tasks for windows_conn_params role
+# main.yml tasks for windows_conn_params role 
 
 # Wait for WINRM connectivity on port 5986 before proceeding. 
 # Rudimentary approach to addressing new server provisioning related Ansible timeouts. 
