@@ -12,6 +12,25 @@ locals {
   onboot = true
   nameserver = "192.168.2.1"
   searchdomain = "int.layer8sys.com"
+  // Dynamic block for network adapters to add to VM
+  vm_network = [
+    {
+      model = "virtio"
+      bridge = "vmbr0"
+      tag = null
+    },
+  ]
+
+  // Dynamic block for disk devices to add to VM. 1st is OS, size should match or exceed template.
+  vm_disk = [
+    {
+      type = "scsi"
+      storage = "vm-store"
+      size = "50G"
+      format = "qcow2"
+      ssd = 0
+    },         
+  ]   
   boot = "order=scsi0;ide2;net0"
   agent = 1
   ssh_public_keys = tls_private_key.bootstrap_private_key.public_key_openssh
@@ -19,6 +38,8 @@ locals {
   target_node = "pve1"
   clone = "template-ubuntu-18-04-5-pve1" 
   vm_name = "vault"
+  vm_sockets = 2
+  vm_cores = 2  
   vm_memory = "4096"
   vm_ip_address = "192.168.2.39"
   vm_ip_cidr = "/24"
@@ -35,12 +56,16 @@ module "vault_vm" {
   clone = local.clone
   vm_name = local.vm_name
   desc = local.desc
+  sockets = local.vm_sockets
+  cores = local.vm_cores   
   memory = local.vm_memory
   onboot = local.onboot
   full_clone = local.full_clone
   clone_wait = local.clone_wait
   nameserver = local.nameserver
   searchdomain = local.searchdomain
+  vm_network = local.vm_network
+  vm_disk = local.vm_disk
   boot = local.boot
   agent = local.agent
   ipconfig0 = "ip=${local.vm_ip_address}${local.vm_ip_cidr},gw=${local.vm_ip_gw}"

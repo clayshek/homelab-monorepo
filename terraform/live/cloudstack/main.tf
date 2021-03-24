@@ -13,6 +13,8 @@ locals {
   nameserver = "192.168.2.1"
   searchdomain = "int.layer8sys.com"
   boot = "order=scsi0;ide2;net0"
+  vm_sockets = 2
+  vm_cores = 4  
   agent = 1
   ssh_public_keys = tls_private_key.bootstrap_private_key.public_key_openssh
   terraform_provisioner_type = "ssh"
@@ -26,6 +28,25 @@ locals {
   mgmt_ip_cidr = "/24"
   mgmt_gw = "192.168.2.1"
   mgmt_ansible_inventory_group = "cloudstack_manager"
+  // Dynamic block for network adapters to add to VM
+  mgmt_vm_network = [
+    {
+      model = "virtio"
+      bridge = "vmbr0"
+      tag = null
+    },
+  ]
+
+  // Dynamic block for disk devices to add to VM. 1st is OS, size should match or exceed template.
+  mgmt_vm_disk = [
+    {
+      type = "scsi"
+      storage = "vm-store"
+      size = "50G"
+      format = "qcow2"
+      ssd = 0
+    },         
+  ]    
   
   # -- Hypervisor VMs Variables -- #
   hypervisor_target_node = "pve2"
@@ -41,6 +62,25 @@ locals {
   hypervisor_ip_cidr = "/24"
   hypervisor_gw = "192.168.2.1"
   hypervisor_ansible_inventory_group = "cloudstack_kvm_hypervisor"
+  // Dynamic block for network adapters to add to VM
+  hypervisor_vm_network = [
+    {
+      model = "virtio"
+      bridge = "vmbr0"
+      tag = null
+    },
+  ]
+
+  // Dynamic block for disk devices to add to VM. 1st is OS, size should match or exceed template.
+  hypervisor_vm_disk = [
+    {
+      type = "scsi"
+      storage = "vm-store"
+      size = "50G"
+      format = "qcow2"
+      ssd = 0
+    },         
+  ]    
 }
 
 // Create CloudStack Management VM 
@@ -51,7 +91,11 @@ module "mgmt_vm" {
   clone = local.mgmt_clone
   vm_name = "csmgmt"
   desc = local.desc
+  sockets = local.vm_sockets
+  cores = local.vm_cores    
   memory = local.mgmt_vm_memory
+  vm_network = local.mgmt_vm_network
+  vm_disk = local.mgmt_vm_disk    
   onboot = local.onboot
   full_clone = local.full_clone
   clone_wait = local.clone_wait
@@ -76,7 +120,11 @@ module "hypervisor_nodes" {
   clone = local.hypervisor_clone
   vm_name = "${local.hypervisor_vm_name_prefix}${format("%02d", count.index+1)}"
   desc = local.desc
+  sockets = local.vm_sockets
+  cores = local.vm_cores    
   memory = local.hypervisor_vm_memory
+  vm_network = local.hypervisor_vm_network
+  vm_disk = local.hypervisor_vm_disk    
   onboot = local.onboot
   full_clone = local.full_clone
   clone_wait = local.clone_wait

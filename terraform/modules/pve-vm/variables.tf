@@ -53,6 +53,42 @@ variable "memory" {
     default = "1024"
 }
 
+variable "vm_network" {
+    description = "Specify network devices"
+    type = list(object({
+        model     = string
+        bridge    = string
+        tag       = number
+    }))
+    default = [
+        {
+        model     = "virtio"
+        bridge    = "vmbr0"
+        tag       = null
+        }
+    ]
+}
+
+variable "vm_disk" {
+    description = "Specify disk variables"
+    type = list(object({
+        type        = string
+        storage     = string
+        size        = string
+        format      = string
+        ssd         = number
+    }))
+    default = [
+        {
+        type        = "scsi"
+        storage     = "vm-store"
+        size        = "32G"
+        format      = "raw"
+        ssd         = 0
+        }
+    ]
+}
+
 variable "onboot" {
     description = "A boolean that determines if the container will start on boot."
     type = bool

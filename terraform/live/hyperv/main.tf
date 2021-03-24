@@ -10,14 +10,68 @@ locals {
   default_image_password = "packer"
   clone_wait = 5
   onboot = false
+  vm_sockets = 2
+  vm_cores = 4
   nameserver = "192.168.2.41"
   searchdomain = "int.layer8sys.com"
+  // Dynamic block for network adapters to add to VM
+  vm_network = [
+    {
+      model = "virtio"
+      bridge = "vmbr0"
+      tag = null
+    },
+    {
+      model = "virtio"
+      bridge = "vmbr0"
+      tag = null
+    },
+    {
+      model = "virtio"
+      bridge = "vmbr0"
+      tag = null
+    },    
+  ]
+
+  // Dynamic block for disk devices to add to VM. 1st is OS, size should match or exceed template.
+  vm_disk = [
+    {
+      type = "scsi"
+      storage = "vm-store"
+      size = "50G"
+      format = "qcow2"
+      ssd = 0
+    },
+    {
+      type = "sata"
+      storage = "vm-store"
+      size = "50G"
+      format = "qcow2"
+      ssd = 1
+    },    
+    {
+      type = "sata"
+      storage = "vm-store"
+      size = "50G"
+      format = "qcow2"
+      ssd = 1
+    },  
+    {
+      type = "sata"
+      storage = "vm-store"
+      size = "50G"
+      format = "qcow2"
+      ssd = 1
+    },          
+  ]
+  
   boot = "order=scsi0;ide2;net0"
   agent = 1
   ssh_public_keys = tls_private_key.bootstrap_private_key.public_key_openssh
   terraform_provisioner_type = "winrm"
   provisioner_target_platform = "windows"
   ansible_inventory_filename = "hyperv"
+
 
   # -- First Hyper-V Node Variables -- #
   hvh1_target_node = "pve1"
@@ -45,7 +99,7 @@ locals {
   hvhn_ansible_inventory_group = "hyperv_additional_nodes"
 }
 
-// Create Primary Domain Controller VM 
+// Create First Hypervisor VM 
 module "hvh1_vm" {
   source = "../../modules/pve-vm"
 
@@ -53,11 +107,15 @@ module "hvh1_vm" {
   clone = local.hvh1_clone
   vm_name = local.hvh1_vm_name
   desc = local.desc
+  sockets = local.vm_sockets
+  cores = local.vm_cores  
   memory = local.hvh1_vm_memory
   onboot = local.onboot
   full_clone = local.full_clone
   clone_wait = local.clone_wait
   nameserver = local.nameserver
+  vm_network = local.vm_network
+  vm_disk = local.vm_disk
   searchdomain = local.searchdomain
   boot = local.boot
   agent = local.agent
@@ -71,7 +129,7 @@ module "hvh1_vm" {
   private_key = tls_private_key.bootstrap_private_key.private_key_pem
 }
 
-// Create Secondary Domain Controller VMs
+// Create Additional Hypervisor VMs
 module "hvhn_vms" {
   source = "../../modules/pve-vm"
   count = length(local.hvhn_ip_addresses)
@@ -80,11 +138,15 @@ module "hvhn_vms" {
   clone = local.hvhn_clone
   vm_name = "${local.hvhn_vm_name_prefix}${format("%02d", count.index+2)}"
   desc = local.desc
+  sockets = local.vm_sockets
+  cores = local.vm_cores  
   memory = local.hvhn_vm_memory
   onboot = local.onboot
   full_clone = local.full_clone
   clone_wait = local.clone_wait
   nameserver = local.nameserver
+  vm_network = local.vm_network
+  vm_disk = local.vm_disk
   searchdomain = local.searchdomain
   boot = local.boot
   agent = local.agent
