@@ -1,5 +1,5 @@
 ---
-# main.yml vars file for awx role
+# main.yml vars file for awx role 
 
 awx_admin_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
