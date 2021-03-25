@@ -39,9 +39,17 @@
     state: present
     include_sub_features: yes
     include_management_tools: yes
-  register: win_dcb_feature       
+  register: win_dcb_feature     
+
+- name: Install Active Directory management tools
+  win_feature:
+    name: RSAT-AD-Tools
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+  register: win_ad_feature      
 
 - name: Reboot if required
   win_reboot:
-  when: win_hyperv_feature.reboot_required or win_fc_feature.reboot_required or win_dedup_feature.reboot_required or win_storrep_feature.reboot_required or win_dcb_feature.reboot_required
+  when: win_hyperv_feature.reboot_required or win_fc_feature.reboot_required or win_dedup_feature.reboot_required or win_storrep_feature.reboot_required or win_dcb_feature.reboot_required or win_ad_feature.reboot_required
   
