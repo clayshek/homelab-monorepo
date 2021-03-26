@@ -80,19 +80,23 @@ VM deployments based on a [template](https://pve.proxmox.com/wiki/VM_Templates_a
 
 ### Microsoft Windows Server Lab:
 - 2x Active Directory Domain Controllers (Proxmox VMs)
-- 4-node Microsoft Hyper-V Cluster (Proxmox VMs)
+- 4-node nested Microsoft Hyper-V Cluster (Proxmox VMs)
 - System Center Virtual Machine Manager (Proxmox VM)
 - Windows Admin Center (Proxmox VM)
 
 The base VMs for the Windows Server lab are provisioned using the terraform code in this repo, then configured with the included ansible playbooks.  
 
 ### Apache CloudStack (Proxmox VMs)
-- 3x KVM hypervisors (Ubuntu)
+- 3x nested KVM hypervisors (Ubuntu)
 - 1x Ubuntu CloudStack management server
 
 Provisioned with Terraform, configured with Ansible. 
 
 ### Kubernetes cluster, incl Windows worker node (Proxmox VMs)
+
+### [K3s](https://k3s.io/) sandbox cluster (Proxmox VMs)
+- 1x k3s master server
+- 3x k3s worker nodes
 
 ### GitLab ([Proxmox Turnkey Linux Container](https://www.turnkeylinux.org/gitlab))
 

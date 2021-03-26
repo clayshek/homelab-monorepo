@@ -1,0 +1,19 @@
+---
+
+- hosts: k3s_server
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: k3s/prereq
+    - role: k3s/download
+    - role: k3s/raspberrypi  
+    - role: k3s/master
+
+- hosts: k3s_workers
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: k3s/prereq
+    - role: k3s/download
+    - role: k3s/raspberrypi  
+    - role: k3s/node

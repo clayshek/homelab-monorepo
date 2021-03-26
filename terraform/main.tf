@@ -11,6 +11,7 @@
 # terraform [plan|apply|destroy] -target=module.wac
 # terraform [plan|apply|destroy] -target=module.hyperv
 # terraform [plan|apply|destroy] -target=module.awx
+# terraform [plan|apply|destroy] -target=module.k3s
 # -------------------------------------------------------------------------------------------
 
 terraform {
@@ -80,4 +81,11 @@ module "cloudstack" {
 #------------------------------------------#
 module "awx" {
   source = "./live/awx"
+}
+
+#------------------------------------------#
+# ---------------- k3s ------------------- #
+#------------------------------------------#
+module "k3s" {
+  source = "./live/k3s"
 }

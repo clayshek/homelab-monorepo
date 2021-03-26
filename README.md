@@ -65,13 +65,15 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 | Product | Status |
 | ------  | ------ |
 | Active Directory | Working |
-| Hyper-V | Partial |
-| CloudStack | Working |
+| Hyper-V (nested) | Partial |
+| CloudStack / KVM (nested) | Working |
 | Windows Admin Center | Working |
 | Hashicorp Vault | Partial |
 | GitHub Actions Runner | Working |
 | Consul | Pending |
-| Kubernetes | Pending |
+| K3s (Proxmox VMs) | Working |
+| K3s (Raspberry Pis) | Working |
+| Kubernetes (Proxmox VMs) | Pending |
 | Grafana | Pending |
 | OpenStack | Pending |
 | Infoblox | Pending |
