@@ -1,7 +1,7 @@
 ---
 
  - hosts: hashi_vault
-   gather_facts: no
+   gather_facts: yes
    roles:
      - linux_conn_params
      #- os_upgrade

@@ -1,0 +1,45 @@
+---
+# main.yml tasks for rancher role
+# Ref: https://rancher.com/docs/rancher/v2.5/en/installation/other-installation-methods/install-rancher-on-linux/
+
+- name: Install curl
+  apt:
+    name: curl
+    state: present
+
+#- name: Create rancher dir
+#  file:
+#    path: /etc/rancher
+#    state: directory
+#    mode: u+rwx,g+rwx,o+rwx
+
+#- name: Create rke2 dir
+#  file:
+#    path: /etc/rancher/rke2
+#    state: directory
+#    mode: u+rwx,g+rwx,o+rwx    
+
+#- name: Template RancherD config file
+#  template:
+#    src: config.yml.j2
+#    dest: /etc/rancher/rke2/config.yml
+
+- name: Run RancherD Installer
+  shell:
+    cmd: curl -sfL https://get.rancher.io | sh -
+  args:
+    warn: no
+
+- name: Enable RancherD Service
+  command: systemctl enable rancherd-server.service 
+
+- name: Start RancherD Service
+  command: systemctl start rancherd-server.service  
+  
+- name: Wait for port 6443 to become open on the host, don't start checking for 180 seconds
+  wait_for:
+    port: 6443
+    delay: 180  
+
+- name: Bootstrap Rancher and set admin password
+  command: rancherd reset-admin --password {{rancher_admin_password}}

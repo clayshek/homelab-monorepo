@@ -1,0 +1,27 @@
+---
+# main.yml tasks for linux common role
+
+# Update the default password baked into the Ubuntu image template
+- name: Update default image password
+  ansible.builtin.user:
+    name: ubuntu
+    password: "{{ linux_admin_password | string | password_hash('sha512') }}"
+    # https://github.com/ansible/ansible/issues/24425#issuecomment-636330367
+  when: ansible_distribution == 'Ubuntu'
+
+# Create new user account and associate with ssh key
+- name: Create new account
+  ansible.builtin.user:
+    name: clay
+    password: "{{ linux_admin_password | string | password_hash('sha512') }}"
+    # https://github.com/ansible/ansible/issues/24425#issuecomment-636330367
+    expires: -1
+    groups: "sudo"
+    shell: /bin/bash
+    append: yes
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: clay
+    state: present
+    key: "{{ lookup('file', 'id_rsa.pub') }}"    

@@ -4,6 +4,7 @@
    gather_facts: yes
    roles:
      - linux_conn_params
+     - linux_common
      - os_upgrade
      - package_updates
      - k3s
@@ -16,6 +17,7 @@
    gather_facts: yes
    roles:
      - linux_conn_params
+     - linux_common
      - os_upgrade
      - package_updates 
      - k3s  

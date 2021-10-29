@@ -74,6 +74,8 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 | K3s (Proxmox VMs) | Working |
 | K3s (Raspberry Pis) | Working |
 | Kubernetes (Proxmox VMs) | Pending |
+| Rancher | Working |
+| VMware ESXi (nested) | Pending |
 | Grafana | Pending |
 | OpenStack | Pending |
 | Infoblox | Pending |
@@ -85,7 +87,7 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 
 ## To-Do
 
-- [ ] Add capability to add user ssh key with Ansible
+- [X] Add capability to add user ssh key with Ansible
 - [ ] Move secrets to Hashicorp Vault
 - [ ] Add OpenSSH to windows_common Ansible role
 - [ ] Convert Packer from json to hcl

@@ -12,6 +12,7 @@
 # terraform [plan|apply|destroy] -target=module.hyperv
 # terraform [plan|apply|destroy] -target=module.awx
 # terraform [plan|apply|destroy] -target=module.k3s
+# terraform [plan|apply|destroy] -target=module.rancher
 # -------------------------------------------------------------------------------------------
 
 terraform {
@@ -81,6 +82,13 @@ module "cloudstack" {
 #------------------------------------------#
 module "awx" {
   source = "./live/awx"
+}
+
+#------------------------------------------#
+# -------------- Rancher ----------------- #
+#------------------------------------------#
+module "rancher" {
+  source = "./live/rancher"
 }
 
 #------------------------------------------#
