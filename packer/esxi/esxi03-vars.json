@@ -1,0 +1,6 @@
+{
+  "template_name": "tpl-esxi03",
+  "proxmox_node" : "pve2",
+  "ssh_host": "192.168.2.93",
+  "kickstart_filename": "esxi03.cfg"
+}
