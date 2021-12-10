@@ -18,5 +18,8 @@ crash.log
 ansible/inventory/*
 !ansible/inventory/.gitkeep
 
+# Temp files
+.temp/*
+
 *.msi
 private_key.pem

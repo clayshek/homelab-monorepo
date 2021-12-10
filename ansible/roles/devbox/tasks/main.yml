@@ -1,0 +1,7 @@
+---
+# main.yml tasks for devbox role
+
+- name: Update repositories cache and install dev tools
+  apt:
+    name: git
+    update_cache: true    
