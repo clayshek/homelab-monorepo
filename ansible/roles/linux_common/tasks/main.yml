@@ -24,4 +24,4 @@
   authorized_key:
     user: clay
     state: present
-    key: "{{ lookup('file', 'id_rsa.pub') }}"    
+    key: "{{ lookup('file', 'id_rsa_lab.pub') }}"    

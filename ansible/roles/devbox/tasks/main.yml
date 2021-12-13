@@ -1,7 +1,85 @@
 ---
 # main.yml tasks for devbox role
 
-- name: Update repositories cache and install dev tools
+# -------------- Update Repositories Cache --------------
+
+- name: Update repositories cache 
+  apt:
+    update_cache: true    
+
+# --------------  Pre-reqs & New Repos ------------------
+ 
+- name: Install GPG
+  apt:
+    name: gpg
+    state: present
+    update_cache: yes    
+
+- name: Install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+    update_cache: yes      
+
+- name: Add Hashicorp apt key
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Add GitHub apt key
+  ansible.builtin.apt_key:
+    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    state: present    
+
+- name: Get distribution
+  command: lsb_release -cs
+  register: distro    
+
+- name: Add Hashicorp repository into sources list
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ distro.stdout }} main"
+    state: present
+
+- name: Add GitHub repository into sources list
+  apt_repository:
+    repo: "deb [arch=amd64] https://cli.github.com/packages stable main"
+    state: present    
+
+- name: Add Ansible repository from PPA 
+  ansible.builtin.apt_repository:
+    repo: 'ppa:ansible/ansible'  
+
+- name: Add GoLang repository from PPA
+# https://github.com/golang/go/wiki/Ubuntu 
+  ansible.builtin.apt_repository:
+    repo: 'ppa:longsleep/golang-backports'  
+
+# ------------------- Install Packer --------------------
+- name: Install Packer
+  apt:
+    name: packer
+
+# ------------------- Install Terraform --------------------
+- name: Install Terraform
+  apt:
+    name: terraform
+
+# ------------------- Install GitHub CLI --------------------
+- name: Install GitHub CLI
+  apt:
+    name: gh
+ 
+# ---------------------- Install Git -----------------------
+- name: Install Git
   apt:
     name: git
-    update_cache: true    
+
+# --------------------- Install Ansible ----------------------
+- name: Install Ansible
+  apt:
+    name: ansible
+     
+# --------------------- Install GoLang -----------------------
+- name: Install GoLang
+  apt:
+    name: golang-go    
