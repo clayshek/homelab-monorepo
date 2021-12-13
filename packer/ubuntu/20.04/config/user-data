@@ -2,8 +2,8 @@
 autoinstall:
   version: 1
   identity:
-    hostname: ubuntu-tpl
-    username: ubuntu
+    hostname: tpl-ubuntu-2004
+    username: packer
     # 'ubuntu', but hashed
     password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
   ssh:
@@ -13,5 +13,5 @@ autoinstall:
   package-upgrade: true
   packages:
     - qemu-guest-agent
-  late-commands:
-    - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
+  #late-commands:
+   # - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu

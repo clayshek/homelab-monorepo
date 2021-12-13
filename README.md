@@ -49,7 +49,7 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 - Clone the repo
 
 ### Packer Templates
-- Using the included Packer templates isn't required, but Terraform provisioning expects a template for most workloads.
+- Using the included Packer templates isn't required, but the Terraform provisioning expects a template for most workloads.
 - See README in Packer directory for more info. 
 
 ### Terraform Provisioning
@@ -82,8 +82,11 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 | RasPi Provisioning | Pending |
 | Heroku Integration | Pending |
 | Packer Windows 2019 Template | Not Working |
+| Packer Windows 2022 Template | Pending |
 | Packer Ubuntu 18.04 Template | Working |
-| Packer Ubuntu 20.04 Template | Not Working |
+| Packer Ubuntu 20.04 Template | Working |
+| Packer Rocky Linux Template | Pending |
+| Packer ESXi Template | Working |
 
 ## To-Do
 
