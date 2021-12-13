@@ -39,7 +39,7 @@ locals {
   vm_name = "devbox"
   vm_sockets = 2
   vm_cores = 2
-  vm_memory = "4096"
+  vm_memory = "6144"
   vm_ip_address = "192.168.2.8"
   vm_ip_cidr = "/24"
   vm_ip_gw = "192.168.2.1"
