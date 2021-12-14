@@ -6,7 +6,7 @@ locals {
   # -- Common Variables -- #
   desc = "AWX VM, created with Terraform on ${timestamp()}"
   full_clone = true
-  default_image_username = "ubuntu"
+  default_image_username = "packer"
   default_image_password = "ubuntu"
   clone_wait = 5
   onboot = true
