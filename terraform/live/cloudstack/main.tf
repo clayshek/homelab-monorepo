@@ -21,8 +21,8 @@ locals {
   ansible_inventory_filename = "cloudstack"
 
   # -- Management VM Variables -- #
-  mgmt_target_node = "pve1"
-  mgmt_clone = "template-ubuntu-18-04-5-pve1" 
+  mgmt_target_node = "pve2"
+  mgmt_clone = "tpl-ubuntu-18-04-6-pve2" 
   mgmt_vm_memory = "4096"
   mgmt_ip_address = "192.168.2.70"
   mgmt_ip_cidr = "/24"
@@ -49,8 +49,8 @@ locals {
   ]    
   
   # -- Hypervisor VMs Variables -- #
-  hypervisor_target_node = "pve2"
-  hypervisor_clone = "template-ubuntu-18-04-5-pve2" 
+  hypervisor_target_node = "pve3"
+  hypervisor_clone = "tpl-ubuntu-18-04-6-pve3" 
   hypervisor_vm_name_prefix = "kvm"
   hypervisor_vm_memory = "2048"
   // IP assignment count in this block will control count of hypervisor VMs provisioned
