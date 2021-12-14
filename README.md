@@ -68,6 +68,7 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 | Hyper-V (nested) | Partial |
 | CloudStack / KVM (nested) | Working |
 | Windows Admin Center | Working |
+| AWX | Working |
 | Hashicorp Vault | Partial |
 | GitHub Actions Runner | Working |
 | Consul | Pending |
