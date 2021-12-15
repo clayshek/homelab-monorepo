@@ -86,7 +86,7 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 | Packer Windows 2022 Template | Pending |
 | Packer Ubuntu 18.04 Template | Working |
 | Packer Ubuntu 20.04 Template | Working |
-| Packer Rocky Linux Template | Pending |
+| Packer Rocky Linux Template | Working |
 | Packer ESXi Template | Working |
 
 ## To-Do
