@@ -23,7 +23,7 @@ locals {
 
   # -- K3s Server Node VM Variables -- #
   k3sserver_target_node = "pve1"
-  k3sserver_clone = "tpl-ubuntu-18-04-6-pve1" 
+  k3sserver_clone = "tpl-ubuntu-20-04-3-pve1" 
   k3sserver_vm_name = "k3smaster"
   k3sserver_vm_memory = "2048"
   k3sserver_ip_address = "192.168.2.60"
@@ -52,7 +52,7 @@ locals {
   
   # -- K3s Worker Node VM Variables -- #
   k3sworker_target_node = "pve2"
-  k3sworker_clone = "tpl-ubuntu-18-04-6-pve2" 
+  k3sworker_clone = "tpl-ubuntu-20-04-3-pve2" 
   k3sworker_vm_name_prefix = "k3sworker"
   k3sworker_vm_memory = "2048"
   // IP assignment count in this block will control count of k3sworker VMs provisioned
