@@ -3,9 +3,11 @@ autoinstall:
   version: 1
   identity:
     hostname: tpl-ubuntu-2004
-    username: packer
+    username: ansible
     # 'ubuntu', but hashed
-    password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+    #password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+    # 'ansible', but hashed
+    password: "$6$FhcddHFVZ7ABA4Gi$LOtq1F3WwTmi9OsZxbJN.8p6cr7u3/5e.yOLG69Lrbw5cGMJ3vvDNbG0EW4OHYv0G4VJzodk0wyNwPYeArFUU."
   ssh:
     install-server: true
     allow-pw: true
@@ -14,4 +16,4 @@ autoinstall:
   packages:
     - qemu-guest-agent
   late-commands:
-    - echo 'packer ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/packer
+    - echo 'ansible ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ansible
