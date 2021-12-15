@@ -95,6 +95,7 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 - [ ] Move secrets to Hashicorp Vault
 - [ ] Add OpenSSH to windows_common Ansible role
 - [ ] Convert Packer from json to hcl
+- [ ] Setup remote terraform state
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
