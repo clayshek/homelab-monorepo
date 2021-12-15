@@ -34,8 +34,8 @@ locals {
   agent = 1
   ssh_public_keys = tls_private_key.bootstrap_private_key.public_key_openssh
   terraform_provisioner_type = "ssh"
-  target_node = "pve2"
-  clone = "tpl-ubuntu-18-04-6-pve2" 
+  target_node = "pve3"
+  clone = "tpl-ubuntu-20-04-3-pve3" 
   vm_name = "rancher"
   vm_sockets = 2
   vm_cores = 2
