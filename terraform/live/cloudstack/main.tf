@@ -177,7 +177,11 @@ resource "null_resource" "configuration" {
 
   // Clear existing records (if exists) from known_hosts to prevent possible ssh connection issues
   provisioner "local-exec" {
-    command = "ssh-keygen -f ~/.ssh/known_hosts -R ${local.mgmt_ip_address}"
+    command = <<-EOT
+      if test -f "~/.ssh/known_hosts"; then
+        ssh-keygen -f ~/.ssh/known_hosts -R ${local.mgmt_ip_address}
+      fi
+      EOT
   }
 
   // Ansible playbook run
