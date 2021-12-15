@@ -6,8 +6,8 @@ locals {
   # -- Common Variables -- #
   desc = "Rancher VM, created with Terraform on ${timestamp()}"
   full_clone = true
-  default_image_username = "packer"
-  default_image_password = "ubuntu"
+  default_image_username = "ansible"
+  default_image_password = "ansible"
   clone_wait = 5
   onboot = true
   nameserver = "192.168.2.1"
@@ -34,8 +34,8 @@ locals {
   agent = 1
   ssh_public_keys = tls_private_key.bootstrap_private_key.public_key_openssh
   terraform_provisioner_type = "ssh"
-  target_node = "pve3"
-  clone = "tpl-ubuntu-20-04-3-pve3" 
+  target_node = "pve1"
+  clone = "tpl-ubuntu-20-04-3-pve1" 
   vm_name = "rancher"
   vm_sockets = 2
   vm_cores = 2

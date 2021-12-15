@@ -2,9 +2,9 @@
 # main.yml tasks for linux common role
 
 # Update the default password baked into the Ubuntu image template
-- name: Update default Ubuntu Packer image password
+- name: Update default Packer image password
   ansible.builtin.user:
-    name: packer
+    name: ansible
     password: "{{ linux_admin_password | string | password_hash('sha512') }}"
     # https://github.com/ansible/ansible/issues/24425#issuecomment-636330367
   when: ansible_distribution == 'Ubuntu'
