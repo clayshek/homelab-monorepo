@@ -36,10 +36,15 @@
 - name: Start RancherD Service
   command: systemctl start rancherd-server.service  
   
-- name: Wait for port 6443 to become open on the host, don't start checking for 180 seconds
+- name: Wait for port 6443 (RancherD Service) to become open on the host, don't start checking for 180 seconds
   wait_for:
     port: 6443
     delay: 180  
+
+# This is hacky, but necessary for Rancher startup to complete before next step
+- name: Wait another 270 seconds for Rancher startup to fully complete
+  wait_for:
+    timeout: 270 
 
 - name: Bootstrap Rancher and set admin password
   command: rancherd reset-admin --password {{rancher_admin_password}}
