@@ -47,7 +47,7 @@
 
 - name: Appending the group 'docker' to the user's groups
   ansible.builtin.user:
-    name: ubuntu
+    name: packer
     groups: docker
     append: yes    
 
@@ -94,9 +94,9 @@
 - name: Clone AWX repo from github
   ansible.builtin.git:
     repo: https://github.com/ansible/awx.git
-    dest: /home/ubuntu/awx
+    dest: /var/tmp/awx
     depth: 50
     version: 17.1.0 
 
 - name: Run AWX Install Ansible Playbook    
-  shell: ansible-playbook -i awx/installer/inventory -e admin_password={{awx_admin_password}} awx/installer/install.yml    
+  shell: ansible-playbook -i /var/tmp/awx/installer/inventory -e admin_password={{awx_admin_password}} /var/tmp/awx/installer/install.yml    
