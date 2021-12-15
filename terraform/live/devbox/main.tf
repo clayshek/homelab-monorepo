@@ -6,8 +6,8 @@ locals {
   # -- Common Variables -- #
   desc = "Development VM, created with Terraform on ${timestamp()}"
   full_clone = true
-  default_image_username = "packer"
-  default_image_password = "ubuntu"
+  default_image_username = "ansible"
+  default_image_password = "ansible"
   clone_wait = 5
   onboot = true
   nameserver = "192.168.2.1"
