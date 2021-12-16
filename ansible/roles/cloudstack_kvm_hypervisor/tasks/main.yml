@@ -14,7 +14,8 @@
     pkg:
       - qemu 
       - qemu-kvm 
-      - libvirt-bin
+      - libvirt-daemon-system
+      - libvirt-clients
       - virt-manager 
       - bridge-utils
     state: present
