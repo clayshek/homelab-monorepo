@@ -34,6 +34,7 @@ GitHub Repo: [https://github.com/clayshek/homelab-monorepo](https://github.com/c
   - 1x Netgear 8-port unmanaged switch
   - 1x Ubiquiti [Unifi AP AC Pro](ui.com/unifi/unifi-ap-ac-pro/)
 - Storage
+  - 1x Synology DS920+ NAS storage device (iSCSI & NFS)
   - 1x Buffalo 500 GB NAS (backups, image storage, etc). Old, and requires SMB v1, target for replacement.
   - Otherwise locally attached storage (R610 RAID controller limitation not allowing JBOD passthrough restricts ability to use Ceph and other cluster storage technologies)
 - Power
@@ -53,6 +54,7 @@ GitHub Repo: [https://github.com/clayshek/homelab-monorepo](https://github.com/c
   - lab.layer8sys.com (TBD)
 
 - Wireless
+  - Pending
 
 
 ### **Raspberry Pi Provisioning & Config**
@@ -97,6 +99,10 @@ Provisioned with Terraform, configured with Ansible.
 ### [K3s](https://k3s.io/) sandbox cluster (Proxmox VMs)
 - 1x k3s master server
 - 3x k3s worker nodes
+- 1x Rancher node
+
+### Nested VMware Lab (Proxmox VMs)
+- 4x nested ESXi servers
 
 ### GitLab ([Proxmox Turnkey Linux Container](https://www.turnkeylinux.org/gitlab))
 
@@ -118,7 +124,7 @@ Provisioned with Terraform, configured with Ansible.
 ### APC UPS Monitor (K3s container)
 
 ## General To-Dos
-- [ ] Identify better NAS storage solution, potentially with iSCSI, also providing persistent K3s storage.
+- [X] Identify better NAS storage solution, potentially with iSCSI, also providing persistent K3s storage. DONE - Synology DS920+
 - [ ] Update [Proxmox config repo](https://github.com/clayshek/ansible-proxmox-config) to automate cluster creation/join & storage setup. Possibly change to auto playbook pull?
 
 ## Diagram & Photos
