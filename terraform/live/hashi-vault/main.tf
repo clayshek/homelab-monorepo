@@ -35,8 +35,8 @@ locals {
   agent = 1
   ssh_public_keys = tls_private_key.bootstrap_private_key.public_key_openssh
   terraform_provisioner_type = "ssh"
-  target_node = "pve1"
-  clone = "tpl-ubuntu-18-04-6-pve1" 
+  target_node = "pve3"
+  clone = "tpl-ubuntu-20-04-3-pve3" 
   vm_name = "vault"
   vm_sockets = 2
   vm_cores = 2  
@@ -114,6 +114,6 @@ resource "null_resource" "configuration" {
 
   // Ansible playbook run
   provisioner "local-exec" {
-    command = "ansible-playbook -u ${local.default_image_username} -i ../ansible/inventory --private-key ${path.module}/private_key.pem ../ansible/${local.ansible_inventory_group}.yml"
+    command = "ansible-playbook -u ${local.default_image_username} -i ../ansible/inventory --private-key ${path.module}/private_key.pem --vault-password-file ../ansible/.vault_pass ../ansible/${local.ansible_inventory_group}.yml"
   }
 }
