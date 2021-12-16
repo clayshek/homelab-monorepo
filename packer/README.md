@@ -21,7 +21,7 @@ Details on Packer implementation and usage for this repo. Reference README one l
 
   - **Ubuntu 18.04**: Working
   - **Ubuntu 20.04**: Working (somewhat hacky, see notes above). 
-  - **[Rocky Linux](https://rockylinux.org/)** 8.5: Pending
+  - **[Rocky Linux](https://rockylinux.org/)** 8.5: Working
   - **Windows Server 2019**: Partially working. Base build succeeds, difficulty with Cloudbase-Init integration. Manually finishing the build at this point. 
   - **Windows Server 2022**: Pending
   - **VMware ESXi**: Working (somewhat hacky, see notes above). 
