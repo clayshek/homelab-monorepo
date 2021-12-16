@@ -3,6 +3,6 @@
  - hosts: github_runner
    gather_facts: yes
    roles:
-     #- os_upgrade
-     #- package_updates
+     - os_upgrade
+     - package_updates
      - github_runner
