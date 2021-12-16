@@ -3,17 +3,18 @@
  - hosts: cloudstack_manager
    gather_facts: yes
    roles:
-     #- os_upgrade
-     #- package_updates
+     - os_upgrade
+     - package_updates
      - linux_conn_params
      - linux_common     
      - cloudstack_common
      - cloudstack_manager
  
  - hosts: cloudstack_kvm_hypervisor
-   gather_facts: no
+   gather_facts: yes
    roles:
-     #- os_upgrade
+     - os_upgrade
+     - package_updates
      - linux_conn_params
      - linux_common     
      - cloudstack_common
