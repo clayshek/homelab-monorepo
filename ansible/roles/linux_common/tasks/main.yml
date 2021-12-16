@@ -19,6 +19,19 @@
     groups: "sudo"
     shell: /bin/bash
     append: yes
+  when: ansible_os_family == 'Debian'
+
+# Create new user account and associate with ssh key
+- name: Create new account
+  ansible.builtin.user:
+    name: clay
+    password: "{{ linux_admin_password | string | password_hash('sha512') }}"
+    # https://github.com/ansible/ansible/issues/24425#issuecomment-636330367
+    expires: -1
+    groups: "wheel"
+    shell: /bin/bash
+    append: yes
+  when: ansible_os_family == 'RedHat'  
 
 - name: Set authorized key taken from file
   authorized_key:
