@@ -64,18 +64,18 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 
 | Product | Status |
 | ------  | ------ |
-| Active Directory | Working |
+| Active Directory | <span style="background-color:green">Working</span> |
 | Hyper-V (nested) | Partial |
-| CloudStack / KVM (nested) | Working |
-| Windows Admin Center | Working |
-| AWX | Working |
+| CloudStack / KVM (nested) | <span style="background-color:green">Working</span> |
+| Windows Admin Center | <span style="background-color:green">Working</span> |
+| AWX | <span style="background-color:green">Working</span> |
 | Hashicorp Vault | Partial |
-| GitHub Actions Runner | Working |
+| GitHub Actions Runner | <span style="background-color:green">Working</span> |
 | Consul | Pending |
-| K3s (Proxmox VMs) | Working |
-| K3s (Raspberry Pis) | Working |
+| K3s (Proxmox VMs) | <span style="background-color:green">Working</span> |
+| K3s (Raspberry Pis) | <span style="background-color:green">Working</span> |
 | Kubernetes (Proxmox VMs) | Pending |
-| Rancher | Working |
+| Rancher | <span style="background-color:green">Working</span> |
 | VMware ESXi (nested) | Pending |
 | Grafana | Pending |
 | OpenStack | Pending |
@@ -84,10 +84,10 @@ Tooling here enables provisioning, config, destruction, and reprovisioning of va
 | Heroku Integration | Pending |
 | Packer Windows 2019 Template | Not Working |
 | Packer Windows 2022 Template | Pending |
-| Packer Ubuntu 18.04 Template | Working |
-| Packer Ubuntu 20.04 Template | Working |
-| Packer Rocky Linux Template | Working |
-| Packer ESXi Template | Working |
+| Packer Ubuntu 18.04 Template | <span style="background-color:green">Working</span> |
+| Packer Ubuntu 20.04 Template | <span style="background-color:green">Working</span> |
+| Packer Rocky Linux Template | <span style="background-color:green">Working</span> |
+| Packer ESXi Template | <span style="background-color:green">Working</span> |
 
 ## To-Do
 
