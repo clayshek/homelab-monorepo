@@ -1,7 +1,7 @@
 ---
 # main.yml tasks for github_runner role
 
-# -------------- Packer install and Pre-reqs ---------------
+# --------------  Pre-reqs & New Repos ------------------
 - name: Install GPG
   apt:
     name: gpg
@@ -19,16 +19,29 @@
 - name: Add Hashicorp repository into sources list
   apt_repository:
     repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ distro.stdout }} main"
-    #repo: deb-src http://archive.canonical.com/ubuntu hardy partner
     state: present
     update_cache: true
 
-- name: Update repositories cache and install Packer
+- name: Add Ansible repository from PPA 
+  ansible.builtin.apt_repository:
+    repo: 'ppa:ansible/ansible' 
+
+
+# ------------------- Install Packer --------------------
+- name: Install Packer
   apt:
     name: packer
-    update_cache: true
 
-# ----------------------------------------------------------
+# ------------------- Install Terraform --------------------
+- name: Install Terraform
+  apt:
+    name: terraform
+
+# --------------------- Install Ansible ----------------------
+- name: Install Ansible
+  apt:
+    name: ansible
+
 
 # ---------- GitHub Actions Runner Install & Config ---------
 # Ref: docs.github.com/en/actions/hosting-your-own-runners
@@ -40,12 +53,12 @@
 
 - name: Download and unarchive GitHub Actions Runner
   ansible.builtin.unarchive:
-    src: https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz
+    src: https://github.com/actions/runner/releases/download/v{{github_runner_version}}/actions-runner-linux-x64-{{github_runner_version}}.tar.gz
     dest: /opt/github-actions-runner
     remote_src: yes    
 
 - name: Configure GitHub Actions Runner
-  command: /opt/github-actions-runner/config.sh --url https://github.com/clayshek/packer-proxmox-templates --token AFZSJDMQPW5EVBFQZV74WOTAG65C6
+  command: /opt/github-actions-runner/config.sh --url {{git_repo_url}} --token {{git_repo_token}}
     #args:
      # creates: /opt/github-actions-runner/config.sh
   environment:

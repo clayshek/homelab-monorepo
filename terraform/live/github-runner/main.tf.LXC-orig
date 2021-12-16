@@ -1,0 +1,102 @@
+// "Live" Terraform infra config for a GitHub Actions Local Runner 
+// running on Proxmox LXE container. Post-provisioning config handed off to Ansible.
+
+// Set local variables for provisioning
+locals {
+  target_node = "pve1"
+  ostemplate = "nas-share:vztmpl/rockylinux-8-default_20210929_amd64.tar.xz" 
+  default_image_username = "root"
+  hostname = "github-runner"
+  description = "GitHub Actions Runner LXC container, created with Terraform on ${timestamp()}, from template ${local.ostemplate}."
+  cores = 2
+  memory = "1024"
+  onboot = true
+  start = true
+  network_name = "eth0"
+  network_bridge = "vmbr0"
+  network_ip_address = "192.168.2.6"
+  network_ip_cidr = "/24"
+  network_gw = "192.168.2.1"
+  network_firewall = false
+  nameserver = "192.168.2.1"
+  searchdomain = "int.layer8sys.com"
+  password = "ansible"
+  rootfs_storage = "vm-store"
+  rootfs_size = "25G"
+  unprivileged = true
+  ssh_public_keys = tls_private_key.bootstrap_private_key.public_key_openssh
+  ansible_inventory_group = "github_runner"
+  ansible_inventory_filename = "github_runner"
+}
+
+// Create container 
+module "github_runner_container" {
+  source = "../../modules/pve-lxc"
+
+  target_node = local.target_node
+  ostemplate = local.ostemplate
+  hostname = local.hostname
+  description = local.description
+  cores = local.cores
+  memory = local.memory
+  onboot = local.onboot
+  start = local.start
+  network_name = local.network_name
+  network_bridge = local.network_bridge
+  network_ip = join("",[local.network_ip_address,local.network_ip_cidr])
+  network_gw = local.network_gw
+  network_firewall = local.network_firewall
+  nameserver = local.nameserver
+  searchdomain = local.searchdomain
+  password = local.password
+  rootfs_storage = local.rootfs_storage
+  rootfs_size = local.rootfs_size
+  unprivileged = local.unprivileged
+  ssh_public_keys = local.ssh_public_keys
+  ip_address = local.network_ip_address
+  default_image_username = local.default_image_username
+  private_key = tls_private_key.bootstrap_private_key.private_key_pem
+
+}
+
+// Create a temporary key pair for post-provisioning config
+resource "tls_private_key" "bootstrap_private_key" {
+  algorithm = "RSA"
+}
+
+// Create temp private key file from key pair above for initial Ansible use
+resource "local_file" "temp-private-key" {
+  sensitive_content = tls_private_key.bootstrap_private_key.private_key_pem
+  filename = "${path.module}/private_key.pem"
+  file_permission = "0600"
+}
+
+// Create Ansible inventory file
+module "ansible_inventory" {
+  source = "../../modules/create-ansible-inventory"
+  servers = {
+    (local.ansible_inventory_group) = [local.network_ip_address]
+  }
+  ansible_inventory_filename = local.ansible_inventory_group
+}
+
+// Ansible post-provisioning configuration
+resource "null_resource" "configuration" {
+  depends_on = [
+    module.github_runner_container
+  ]
+
+  // Clear existing record (if exists) from known_hosts to prevent ssh connection issues
+  provisioner "local-exec" {
+    command = <<-EOT
+      if test -f "~/.ssh/known_hosts"; then
+        ssh-keygen -f ~/.ssh/known_hosts -R ${local.network_ip_address}
+      fi
+      EOT
+  }  
+
+  // Ansible playbook run
+  provisioner "local-exec" {
+    command = "ansible-playbook -u ${local.default_image_username} -i ../ansible/inventory --private-key ${path.module}/private_key.pem ../ansible/${local.ansible_inventory_filename}.yml"
+  }
+}

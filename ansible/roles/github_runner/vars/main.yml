@@ -2,6 +2,6 @@
 # main.yml vars file for github_runner role
 # Ref: docs.github.com/en/actions/hosting-your-own-runners
 
-github_runner_version: 'v2.277.1'
-git_repo_url: 'https://github.com/repourl/packer-templates'
+github_runner_version: '2.285.1'
+git_repo_url: 'https://github.com/clayshek/packer-proxmox-templates'
 git_repo_token: ''

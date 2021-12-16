@@ -1,62 +1,78 @@
-// "Live" Terraform infra config for a GitHub Actions Local Runner 
-// running on Proxmox LXE container. Post-provisioning config handed off to Ansible.
+// "Live" Terraform infra config for a github-runner instance running on
+// a Proxmox VM. Post-provisioning config handed off to Ansible.
 
-// Set local variables for provisioning
+// Set local variables for provisioning 
 locals {
-  target_node = "pve1"
-  ostemplate = "nasfiles:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz" 
-  default_image_username = "root"
-  hostname = "github-runner"
-  description = "GitHub Actions Runner LXC container, created with Terraform on ${timestamp()}."
-  cores = 2
-  memory = "1024"
+  # -- Common Variables -- #
+  desc = "GitHub Actions Runner VM, created with Terraform on ${timestamp()}, from template ${local.clone}."
+  full_clone = true
+  default_image_username = "ansible"
+  default_image_password = "ansible"
+  clone_wait = 5
   onboot = true
-  start = true
-  network_name = "eth0"
-  network_bridge = "vmbr0"
-  network_ip_address = "192.168.2.6"
-  network_ip_cidr = "/24"
-  network_gw = "192.168.2.1"
-  network_firewall = false
   nameserver = "192.168.2.1"
   searchdomain = "int.layer8sys.com"
-  password = "password"
-  rootfs_storage = "vm-store"
-  rootfs_size = "25G"
-  unprivileged = true
+  vm_network = [
+    {
+      model = "virtio"
+      bridge = "vmbr0"
+      tag = null
+    },
+  ]
+
+  // Dynamic block for disk devices to add to VM. 1st is OS, size should match or exceed template.
+  vm_disk = [
+    {
+      type = "scsi"
+      storage = "vm-store"
+      size = "50G"
+      format = "qcow2"
+      ssd = 0
+    },         
+  ]    
+  boot = "order=scsi0;ide2;net0"
+  agent = 1
   ssh_public_keys = tls_private_key.bootstrap_private_key.public_key_openssh
+  terraform_provisioner_type = "ssh"
+  target_node = "pve1"
+  clone = "tpl-ubuntu-20-04-3-pve1" 
+  vm_name = "github-runner"
+  vm_sockets = 2
+  vm_cores = 2
+  vm_memory = "2048"
+  vm_ip_address = "192.168.2.6"
+  vm_ip_cidr = "/24"
+  vm_ip_gw = "192.168.2.1"
   ansible_inventory_group = "github_runner"
-  ansible_inventory_filename = "github_runner"
+  
 }
 
-// Create container 
-module "github_runner_container" {
-  source = "../../modules/pve-lxc"
+// Create GitHub Runner VM 
+module "github_runner_vm" {
+  source = "../../modules/pve-vm"
 
   target_node = local.target_node
-  ostemplate = local.ostemplate
-  hostname = local.hostname
-  description = local.description
-  cores = local.cores
-  memory = local.memory
+  clone = local.clone
+  vm_name = local.vm_name
+  desc = local.desc
+  sockets = local.vm_sockets
+  cores = local.vm_cores
+  memory = local.vm_memory
   onboot = local.onboot
-  start = local.start
-  network_name = local.network_name
-  network_bridge = local.network_bridge
-  network_ip = join("",[local.network_ip_address,local.network_ip_cidr])
-  network_gw = local.network_gw
-  network_firewall = local.network_firewall
+  full_clone = local.full_clone
+  clone_wait = local.clone_wait
+  vm_network = local.vm_network
+  vm_disk = local.vm_disk   
   nameserver = local.nameserver
   searchdomain = local.searchdomain
-  password = local.password
-  rootfs_storage = local.rootfs_storage
-  rootfs_size = local.rootfs_size
-  unprivileged = local.unprivileged
+  boot = local.boot
+  agent = local.agent
+  ipconfig0 = "ip=${local.vm_ip_address}${local.vm_ip_cidr},gw=${local.vm_ip_gw}"
+  ip_address = local.vm_ip_address
   ssh_public_keys = local.ssh_public_keys
-  ip_address = local.network_ip_address
   default_image_username = local.default_image_username
+  default_image_password = local.default_image_password
   private_key = tls_private_key.bootstrap_private_key.private_key_pem
-
 }
 
 // Create a temporary key pair for post-provisioning config
@@ -75,7 +91,7 @@ resource "local_file" "temp-private-key" {
 module "ansible_inventory" {
   source = "../../modules/create-ansible-inventory"
   servers = {
-    (local.ansible_inventory_group) = [local.network_ip_address]
+    (local.ansible_inventory_group) = [local.vm_ip_address]
   }
   ansible_inventory_filename = local.ansible_inventory_group
 }
@@ -83,20 +99,32 @@ module "ansible_inventory" {
 // Ansible post-provisioning configuration
 resource "null_resource" "configuration" {
   depends_on = [
-    module.github_runner_container
+    module.github_runner_vm,
   ]
 
-  // Clear existing record (if exists) from known_hosts to prevent ssh connection issues
+  // Clear existing records (if exists) from known_hosts to prevent possible ssh connection issues
   provisioner "local-exec" {
     command = <<-EOT
       if test -f "~/.ssh/known_hosts"; then
-        ssh-keygen -f ~/.ssh/known_hosts -R ${local.network_ip_address}
+        ssh-keygen -f ~/.ssh/known_hosts -R ${local.vm_ip_address}
       fi
       EOT
-  }  
+  }
+
+   // Disable cloud-init, not needed after first boot
+  provisioner "remote-exec" {
+    inline = ["sudo touch /etc/cloud/cloud-init.disabled"]
+    connection {
+      type     = "ssh"
+      user     = local.default_image_username
+      password = local.default_image_password
+      host     = local.vm_ip_address
+      private_key = tls_private_key.bootstrap_private_key.private_key_pem
+    }    
+  }
 
   // Ansible playbook run
   provisioner "local-exec" {
-    command = "ansible-playbook -u ${local.default_image_username} -i ../ansible/inventory --private-key ${path.module}/private_key.pem ../ansible/${local.ansible_inventory_filename}.yml"
+    command = "ansible-playbook -u ${local.default_image_username} -i ../ansible/inventory --private-key ${path.module}/private_key.pem --vault-password-file ../ansible/.vault_pass ../ansible/${local.ansible_inventory_group}.yml"
   }
 }

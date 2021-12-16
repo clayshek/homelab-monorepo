@@ -3,6 +3,8 @@
  - hosts: github_runner
    gather_facts: yes
    roles:
+     - linux_conn_params
+     - linux_common   
      - os_upgrade
      - package_updates
      - github_runner
