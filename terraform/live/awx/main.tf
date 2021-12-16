@@ -25,7 +25,7 @@ locals {
     {
       type = "scsi"
       storage = "vm-store"
-      size = "40G"
+      size = "50G"
       format = "qcow2"
       ssd = 0
     },         
