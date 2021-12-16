@@ -9,7 +9,7 @@ locals {
   default_image_username = "ansible"
   default_image_password = "ansible"
   clone_wait = 5
-  onboot = true
+  onboot = false
   nameserver = "192.168.2.1"
   searchdomain = "int.layer8sys.com"
   vm_network = [
