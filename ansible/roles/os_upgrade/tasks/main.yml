@@ -7,4 +7,5 @@
     upgrade: dist
     update_cache: yes
   become: yes
+  when: ansible_system == 'Linux'
 # ----------------------------------------------------------    

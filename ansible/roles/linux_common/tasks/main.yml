@@ -7,7 +7,7 @@
     name: ansible
     password: "{{ linux_admin_password | string | password_hash('sha512') }}"
     # https://github.com/ansible/ansible/issues/24425#issuecomment-636330367
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_system == 'Linux'
 
 # Create new user account and associate with ssh key
 - name: Create new account
