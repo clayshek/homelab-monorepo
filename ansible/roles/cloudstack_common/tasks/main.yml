@@ -18,7 +18,8 @@
 
 - name: Add CloudStack repository into sources list
   apt_repository:
-    repo: deb http://download.cloudstack.org/ubuntu bionic 4.15
+    repo: deb http://download.cloudstack.org/ubuntu focal 4.16
+    # Got lazy on above, may need to change OS, distro, and CloudStack version as appropriate.
     state: present
     update_cache: true
   become: yes   
