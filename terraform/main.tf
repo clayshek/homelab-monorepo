@@ -13,6 +13,7 @@
 # terraform [plan|apply|destroy] -target=module.awx
 # terraform [plan|apply|destroy] -target=module.k3s
 # terraform [plan|apply|destroy] -target=module.rancher
+# terraform [plan|apply|destroy] -target=module.devbox
 # -------------------------------------------------------------------------------------------
 
 terraform {
