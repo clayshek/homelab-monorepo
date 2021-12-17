@@ -58,17 +58,20 @@
     remote_src: yes    
 
 - name: Configure GitHub Actions Runner
-  command: /opt/github-actions-runner/config.sh --url {{git_repo_url}} --token {{git_repo_token}}
+  command: /opt/github-actions-runner/config.sh --url {{git_repo_url}} --token {{git_repo_token}} --unattended
     #args:
      # creates: /opt/github-actions-runner/config.sh
   environment:
     RUNNER_ALLOW_RUNASROOT: '1'
 
-#- name: Install GitHub Actions Runner as Service
-#  command: /opt/github-actions-runner/bin/runsvc.sh install
+- name: Install GitHub Actions Runner as Service
+  command: sudo ./svc.sh install root
+  args:
+    chdir: /opt/github-actions-runner
  
-#- name: Start GitHub Actions Runner Service
-#  command: /opt/github-actions-runner/bin/runsvc.sh start
-  #become_user: svc-gitrunner
+- name: Start GitHub Actions Runner Service
+  command: sudo ./svc.sh start
+  args:
+    chdir: /opt/github-actions-runner  
 
 # ----------------------------------------------------------

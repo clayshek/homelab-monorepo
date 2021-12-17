@@ -4,4 +4,3 @@
 
 github_runner_version: '2.285.1'
 git_repo_url: 'https://github.com/clayshek/packer-proxmox-templates'
-git_repo_token: ''
