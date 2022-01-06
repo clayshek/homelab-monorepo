@@ -6,6 +6,7 @@
 #
 # terraform [plan|apply|destroy] -target=module.hashi-vault 
 # terraform [plan|apply|destroy] -target=module.github-runner 
+# terraform [plan|apply|destroy] -target=module.dns
 # terraform [plan|apply|destroy] -target=module.active-directory
 # terraform [plan|apply|destroy] -target=module.cloudstack
 # terraform [plan|apply|destroy] -target=module.wac
@@ -69,6 +70,17 @@ module "github-runner" {
 
   providers = {
     proxmox = proxmox
+  }  
+}
+
+#------------------------------------------#
+# ----------------- DNS ------------------ #
+#------------------------------------------#
+module "dns" {
+  source = "./live/dns"
+
+  providers = {
+    proxmox = proxmox.raspi
   }  
 }
 
