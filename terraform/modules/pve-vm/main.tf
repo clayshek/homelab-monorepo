@@ -1,9 +1,9 @@
 terraform {
-  required_version = ">= 0.14"
   required_providers {
     proxmox = {
       source = "Telmate/proxmox"
-      version = "~> 2.6.7"
+      version = "~> 2.6.7" 
+      //configuration_aliases = [ proxmox, proxmox.raspi ]      
     }
   }
 }

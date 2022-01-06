@@ -1,6 +1,15 @@
 // "Live" Terraform infra config for provisioning Active Directory Domain
 // Controllers, running on Proxmox VMs. Post-provisioning config handed off to Ansible.
 
+terraform {
+  required_providers {
+    proxmox = {
+      source = "Telmate/proxmox"
+      version = "~> 2.6.7"    
+    }
+  }
+}
+
 // Set local variables for provisioning 
 locals {
   # -- Common Variables -- #
@@ -66,7 +75,7 @@ locals {
 
 // Create Primary Domain Controller VM 
 module "pdc_vm" {
-  source = "../../modules/pve-vm"
+  source = "../../modules/pve-vm" 
 
   target_node = local.pdc_target_node
   clone = local.pdc_clone
@@ -97,6 +106,7 @@ module "pdc_vm" {
 // Create Secondary Domain Controller VMs
 module "sdc_vms" {
   source = "../../modules/pve-vm"
+    
   count = length(local.sdc_ip_addresses)
 
   target_node = local.sdc_target_node

@@ -1,6 +1,15 @@
 // "Live" Terraform infra config for a Cloudstack / KVM environment 
 // running on Proxmox VMs. Post-provisioning config handed off to Ansible.
 
+terraform {
+  required_providers {
+    proxmox = {
+      source = "Telmate/proxmox"
+      version = "~> 2.6.7"      
+    }
+  }
+}
+
 // Set local variables for provisioning 
 locals {
   # -- Common Variables -- #
@@ -114,6 +123,7 @@ module "mgmt_vm" {
 // Create Hypervisor VMs
 module "hypervisor_nodes" {
   source = "../../modules/pve-vm"
+
   count = length(local.hypervisor_ip_addresses)
 
   target_node = local.hypervisor_target_node

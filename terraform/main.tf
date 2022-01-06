@@ -22,6 +22,7 @@ terraform {
     proxmox = {
       source = "Telmate/proxmox"
       version = "~> 2.6.7"
+      configuration_aliases = [ proxmox.baremetal, proxmox.raspi ]
     }
   }
 }
@@ -36,11 +37,28 @@ provider "proxmox" {
     // Ref: github.com/Telmate/terraform-provider-proxmox/issues/257
 }
 
+# Additional provider configuration 2nd PVE cluster on Raspberry Pi; child modules 
+# can reference this as `proxmox.raspi`.
+provider "proxmox" {
+    alias = "raspi"
+    pm_api_url = var.proxmox_rpi_api_url
+    pm_user = var.proxmox_rpi_api_user
+    pm_password = var.proxmox_rpi_api_pass
+    pm_tls_insecure = var.proxmox_ignore_tls
+    pm_parallel = 2
+    // pm_parallel hardcoded to 2 as workaround to "transport is closing" issue
+    // Ref: github.com/Telmate/terraform-provider-proxmox/issues/257
+}
+
 #------------------------------------------#
 # --------- Hashicorp Vault --------------- #
 #------------------------------------------#
 module "hashi-vault" {
   source = "./live/hashi-vault"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }
 
 #------------------------------------------#
@@ -48,6 +66,10 @@ module "hashi-vault" {
 #------------------------------------------#
 module "github-runner" {
   source = "./live/github-runner"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }
 
 #------------------------------------------#
@@ -55,13 +77,21 @@ module "github-runner" {
 #------------------------------------------#
 module "active-directory" {
   source = "./live/active-directory"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }
 
 #------------------------------------------#
 # -------- Windows Admin Center ---------- #
 #------------------------------------------#
 module "wac" {
-  source = "./live/wac"
+  source = "./live/wac" 
+
+  providers = {
+    proxmox = proxmox
+  }
 }
 
 #------------------------------------------#
@@ -69,6 +99,10 @@ module "wac" {
 #------------------------------------------#
 module "hyperv" {
   source = "./live/hyperv"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }
 
 #------------------------------------------#
@@ -76,6 +110,10 @@ module "hyperv" {
 #------------------------------------------#
 module "cloudstack" {
   source = "./live/cloudstack"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }
 
 #------------------------------------------#
@@ -83,6 +121,10 @@ module "cloudstack" {
 #------------------------------------------#
 module "awx" {
   source = "./live/awx"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }
 
 #------------------------------------------#
@@ -90,6 +132,10 @@ module "awx" {
 #------------------------------------------#
 module "rancher" {
   source = "./live/rancher"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }
 
 #------------------------------------------#
@@ -97,6 +143,10 @@ module "rancher" {
 #------------------------------------------#
 module "k3s" {
   source = "./live/k3s"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }
 
 #------------------------------------------#
@@ -104,4 +154,8 @@ module "k3s" {
 #------------------------------------------#
 module "devbox" {
   source = "./live/devbox"
+
+  providers = {
+    proxmox = proxmox
+  }  
 }

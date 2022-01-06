@@ -1,6 +1,15 @@
 // "Live" Terraform infra config for provisioning Windows Hyper-V Hypervisors,
 // running on Proxmox VMs. Post-provisioning config handed off to Ansible.
 
+terraform {
+  required_providers {
+    proxmox = {
+      source = "Telmate/proxmox"
+      version = "~> 2.6.7"       
+    }
+  }
+}
+
 // Set local variables for provisioning 
 locals {
   # -- Common Variables -- #
@@ -132,6 +141,7 @@ module "hvh1_vm" {
 // Create Additional Hypervisor VMs
 module "hvhn_vms" {
   source = "../../modules/pve-vm"
+
   count = length(local.hvhn_ip_addresses)
 
   target_node = local.hvhn_target_node

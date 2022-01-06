@@ -1,6 +1,15 @@
 // "Live" Terraform infra config for a nest K3s (k3s.io) cluster 
 // running on Proxmox VMs. Post-provisioning config handed off to Ansible.
 
+terraform {
+  required_providers {
+    proxmox = {
+      source = "Telmate/proxmox"
+      version = "~> 2.6.7"     
+    }
+  }
+}
+
 // Set local variables for provisioning 
 locals {
   # -- Common Variables -- #
@@ -116,6 +125,7 @@ module "k3sserver_vm" {
 // Create k3s worker node VMs
 module "k3sworker_nodes" {
   source = "../../modules/pve-vm"
+
   count = length(local.k3sworker_ip_addresses)
 
   target_node = local.k3sworker_target_node

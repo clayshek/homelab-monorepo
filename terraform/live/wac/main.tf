@@ -1,6 +1,15 @@
 // "Live" Terraform infra config for provisioning a Windows Admin Center VM, 
 // running on Proxmox. Post-provisioning config handed off to Ansible.
 
+terraform {
+  required_providers {
+    proxmox = {
+      source = "Telmate/proxmox"
+      version = "~> 2.6.7"      
+    }
+  }
+}
+
 // Set local variables for provisioning 
 locals {
   # -- Common Variables -- #
