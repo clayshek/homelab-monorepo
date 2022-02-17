@@ -1,0 +1,32 @@
+---
+
+repos:
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.16
+    hooks:
+      - name: terraform fmt
+        id: terraform-fmt
+        args:
+          - '-recursive'
+
+  # - repo: https://github.com/terraform-docs/terraform-docs
+  #   rev: v0.16.0
+  #   hooks:
+  #     # Docs for environment configs
+  #     - name: docs-dev
+  #       id: terraform-docs-go
+  #       args:
+  #         - '-c'
+  #         - '.terraform-docs.yml'
+  #         - './envs/dev'
+  #     # Docs for modules
+  #     - name: docs-modules
+  #       id: terraform-docs-go
+  #       args:
+  #         - '--recursive'
+  #         - '--recursive-path=..'
+  #         - '-c'
+  #         - '.terraform-docs.yml'
+  #         - './modules/helm-cluster-autoscaler'
+
+...
