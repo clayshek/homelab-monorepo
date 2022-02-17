@@ -21,34 +21,34 @@ terraform {
   required_version = ">= 0.14"
   required_providers {
     proxmox = {
-      source = "Telmate/proxmox"
-      version = "~> 2.6.7"
-      configuration_aliases = [ proxmox.baremetal, proxmox.raspi ]
+      source                = "Telmate/proxmox"
+      version               = "~> 2.6.7"
+      configuration_aliases = [proxmox.baremetal, proxmox.raspi]
     }
   }
 }
 
 provider "proxmox" {
-    pm_api_url = var.proxmox_api_url
-    pm_user = var.proxmox_api_user
-    pm_password = var.proxmox_api_pass
-    pm_tls_insecure = var.proxmox_ignore_tls
-    pm_parallel = 2
-    // pm_parallel hardcoded to 2 as workaround to "transport is closing" issue
-    // Ref: github.com/Telmate/terraform-provider-proxmox/issues/257
+  pm_api_url      = var.proxmox_api_url
+  pm_user         = var.proxmox_api_user
+  pm_password     = var.proxmox_api_pass
+  pm_tls_insecure = var.proxmox_ignore_tls
+  pm_parallel     = 2
+  // pm_parallel hardcoded to 2 as workaround to "transport is closing" issue
+  // Ref: github.com/Telmate/terraform-provider-proxmox/issues/257
 }
 
 # Additional provider configuration 2nd PVE cluster on Raspberry Pi; child modules 
 # can reference this as `proxmox.raspi`.
 provider "proxmox" {
-    alias = "raspi"
-    pm_api_url = var.proxmox_rpi_api_url
-    pm_user = var.proxmox_rpi_api_user
-    pm_password = var.proxmox_rpi_api_pass
-    pm_tls_insecure = var.proxmox_ignore_tls
-    pm_parallel = 2
-    // pm_parallel hardcoded to 2 as workaround to "transport is closing" issue
-    // Ref: github.com/Telmate/terraform-provider-proxmox/issues/257
+  alias           = "raspi"
+  pm_api_url      = var.proxmox_rpi_api_url
+  pm_user         = var.proxmox_rpi_api_user
+  pm_password     = var.proxmox_rpi_api_pass
+  pm_tls_insecure = var.proxmox_ignore_tls
+  pm_parallel     = 2
+  // pm_parallel hardcoded to 2 as workaround to "transport is closing" issue
+  // Ref: github.com/Telmate/terraform-provider-proxmox/issues/257
 }
 
 #------------------------------------------#
@@ -59,7 +59,7 @@ module "hashi-vault" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }
 
 #------------------------------------------#
@@ -70,7 +70,7 @@ module "github-runner" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }
 
 #------------------------------------------#
@@ -81,7 +81,7 @@ module "dns" {
 
   providers = {
     proxmox = proxmox.raspi
-  }  
+  }
 }
 
 #------------------------------------------#
@@ -92,14 +92,14 @@ module "active-directory" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }
 
 #------------------------------------------#
 # -------- Windows Admin Center ---------- #
 #------------------------------------------#
 module "wac" {
-  source = "./live/wac" 
+  source = "./live/wac"
 
   providers = {
     proxmox = proxmox
@@ -114,7 +114,7 @@ module "hyperv" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }
 
 #------------------------------------------#
@@ -125,7 +125,7 @@ module "cloudstack" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }
 
 #------------------------------------------#
@@ -136,7 +136,7 @@ module "awx" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }
 
 #------------------------------------------#
@@ -147,7 +147,7 @@ module "rancher" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }
 
 #------------------------------------------#
@@ -158,7 +158,7 @@ module "k3s" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }
 
 #------------------------------------------#
@@ -169,5 +169,5 @@ module "devbox" {
 
   providers = {
     proxmox = proxmox
-  }  
+  }
 }

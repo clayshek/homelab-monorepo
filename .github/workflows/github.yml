@@ -1,0 +1,22 @@
+---
+
+name: "github"
+on:
+- pull_request_target
+
+jobs:
+  gh-auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v3
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          sync-labels: true
+  gh-auto-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: toshimaru/auto-author-assign@v1.1.0
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+
+...

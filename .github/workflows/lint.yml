@@ -1,0 +1,55 @@
+---
+
+name: "lint"
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: deps | terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.5
+      - name: deps | go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.2'
+
+      - name: cache | pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: cache | go
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: deps | pre-commit
+        run: |
+          pip install pre-commit
+          go install github.com/terraform-docs/terraform-docs@v0.16.0
+
+      - name: exec
+        run: >-
+          pre-commit run
+          --color=always
+          --show-diff-on-failure
+          --all-files
+
+...
